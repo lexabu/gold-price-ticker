@@ -1,0 +1,10 @@
+{
+  "name": "Gold Price Ticker",
+  "settings": {
+    "position": { "label": "Position" },
+    "bg_color": { "label": "Background color" },
+    "text_color": { "label": "Text color" },
+    "accent_color": { "label": "Accent color (labels)" },
+    "ticker_speed": { "label": "Scroll speed" }
+  }
+}

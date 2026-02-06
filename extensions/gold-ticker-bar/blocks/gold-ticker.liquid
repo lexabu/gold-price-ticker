@@ -1,0 +1,72 @@
+<div
+  id="gold-ticker-bar"
+  class="gold-ticker"
+  data-proxy-url="{{ shop.url }}/apps/gold-ticker/prices"
+  data-position="{{ block.settings.position }}"
+  data-speed="{{ block.settings.ticker_speed }}"
+  style="
+    --ticker-bg: {{ block.settings.bg_color }};
+    --ticker-text: {{ block.settings.text_color }};
+    --ticker-accent: {{ block.settings.accent_color }};
+  "
+>
+  <div class="gold-ticker__container">
+    <div class="gold-ticker__track">
+      <span class="gold-ticker__loading">Loading gold prices...</span>
+    </div>
+  </div>
+</div>
+
+{{ 'gold-ticker.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gold-ticker.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Gold Price Ticker",
+  "target": "section",
+  "enabled_on": {
+    "templates": ["*"],
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "default": "top",
+      "options": [
+        { "value": "top", "label": "Top of page" },
+        { "value": "bottom", "label": "Bottom of page" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#1a1a2e"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#e8d44d"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color (labels)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "ticker_speed",
+      "label": "Scroll speed",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "default": 50,
+      "unit": "px/s"
+    }
+  ]
+}
+{% endschema %}

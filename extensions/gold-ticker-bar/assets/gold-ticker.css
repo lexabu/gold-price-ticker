@@ -1,0 +1,126 @@
+.gold-ticker {
+  --ticker-bg: #1a1a2e;
+  --ticker-text: #e8d44d;
+  --ticker-accent: #ffffff;
+  position: relative;
+  width: 100%;
+  background: var(--ticker-bg);
+  overflow: hidden;
+  z-index: 999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+.gold-ticker[data-position="top"] {
+  position: sticky;
+  top: 0;
+}
+
+.gold-ticker[data-position="bottom"] {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.gold-ticker__container {
+  padding: 8px 0;
+  overflow: hidden;
+}
+
+.gold-ticker__track {
+  display: flex;
+  gap: 40px;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.gold-ticker__track--animate {
+  animation: gold-ticker-scroll var(--ticker-duration, 30s) linear infinite;
+}
+
+.gold-ticker__track--static {
+  justify-content: center;
+  animation: none;
+}
+
+.gold-ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.gold-ticker__separator {
+  color: var(--ticker-accent);
+  opacity: 0.25;
+  font-size: 11px;
+}
+
+.gold-ticker__karat {
+  color: var(--ticker-accent);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gold-ticker__price {
+  color: var(--ticker-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gold-ticker__unit {
+  color: var(--ticker-accent);
+  opacity: 0.6;
+  font-size: 11px;
+}
+
+.gold-ticker__loading {
+  color: var(--ticker-text);
+  font-size: 13px;
+  opacity: 0.6;
+  padding: 0 20px;
+}
+
+.gold-ticker__timestamp {
+  color: var(--ticker-accent);
+  opacity: 0.4;
+  font-size: 10px;
+  margin-left: 20px;
+}
+
+.gold-ticker--hidden {
+  display: none;
+}
+
+@keyframes gold-ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Desktop: center if fits, scroll if not */
+@media (min-width: 768px) {
+  .gold-ticker__track--static {
+    justify-content: center;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .gold-ticker__track {
+    animation: none !important;
+  }
+  .gold-ticker__track--animate {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    padding: 0 16px;
+  }
+}

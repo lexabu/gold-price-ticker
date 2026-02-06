@@ -1,0 +1,2 @@
+[commands]
+dev = "npm exec react-router dev"
