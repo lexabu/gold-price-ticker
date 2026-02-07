@@ -1,6 +1,27 @@
-import type { LoaderFunctionArgs } from "@react-router/node";
+import type { LoaderFunctionArgs } from "react-router";
 import { getGoldPrices } from "../services/gold-price.server";
 import db from "../db.server";
+
+/**
+ * Build CORS headers for storefront requests.
+ * Allows the shop's own domain to make cross-origin requests.
+ */
+function buildCorsHeaders(request: Request, shopDomain?: string) {
+  const origin = request.headers.get("Origin");
+  // Allow the shop's own domain, or fall back to the origin
+  const allowOrigin =
+    origin && shopDomain && origin.includes(shopDomain.replace(".myshopify.com", ""))
+      ? origin
+      : origin || "*";
+
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    Vary: "Origin",
+  };
+}
 
 /**
  * App Proxy handler.
@@ -14,10 +35,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const shopDomain = url.searchParams.get("shop");
 
+  // Handle CORS preflight
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: buildCorsHeaders(request, shopDomain || undefined),
+    });
+  }
+
+  const corsHeaders = buildCorsHeaders(request, shopDomain || undefined);
+
   if (!shopDomain) {
     return new Response(JSON.stringify({ error: "Missing shop parameter" }), {
       status: 400,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
     });
   }
 
@@ -35,6 +69,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           headers: {
             "Content-Type": "application/json",
             "Cache-Control": "public, max-age=60",
+            ...corsHeaders,
           },
         },
       );
@@ -76,7 +111,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "public, max-age=300",
-        "Access-Control-Allow-Origin": "*",
+        ...corsHeaders,
       },
     });
   } catch (error) {
@@ -94,6 +129,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
+          ...corsHeaders,
         },
       },
     );

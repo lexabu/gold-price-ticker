@@ -1,6 +1,6 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = ""
+client_id = "8f24d9dc1039de8da641961f5bde0e52"
 name = "Gold Price Ticker"
 application_url = "https://example.com"
 embedded = true
@@ -9,14 +9,15 @@ embedded = true
 automatically_update_urls_on_dev = true
 
 [webhooks]
-api_version = "2025-07"
+api_version = "2026-04"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
   uri = "/webhooks/app/uninstalled"
 
 [access_scopes]
-scopes = ""
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_products"
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]

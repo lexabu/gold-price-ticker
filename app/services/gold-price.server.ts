@@ -60,29 +60,35 @@ async function getPrimaryGoldPrice(): Promise<number> {
     .get()
     .json<SwissQuoteResponse[]>();
 
-  const profiles = response[0]?.spreadProfilePrices;
-  if (!profiles?.length) {
-    throw new Error("No gold price profiles available from SwissQuote");
+  // Search across ALL entries for the standard profile
+  // The API returns multiple platform entries (SwissquoteLtd, AT, etc.)
+  // and "standard" may not be in the first entry
+  for (const entry of response) {
+    const standard = entry.spreadProfilePrices?.find(
+      (p: SwissQuoteProfile) => p.spreadProfile === "standard",
+    );
+    if (standard) return standard.ask;
   }
 
-  // Try profiles in order: standard -> premium -> prime
-  const standard = profiles.find((p) => p.spreadProfile === "standard");
-  if (standard) return standard.ask;
-
-  const premium = profiles.find((p) => p.spreadProfile === "premium");
-  if (premium) {
-    console.warn(
-      "SwissQuote: Using premium profile (standard unavailable)",
+  // Fallback: try premium/prime across all entries
+  for (const entry of response) {
+    const premium = entry.spreadProfilePrices?.find(
+      (p: SwissQuoteProfile) => p.spreadProfile === "premium",
     );
-    return premium.ask;
+    if (premium) {
+      console.warn("SwissQuote: Using premium profile (standard unavailable)");
+      return premium.ask;
+    }
   }
 
-  const prime = profiles.find((p) => p.spreadProfile === "prime");
-  if (prime) {
-    console.warn(
-      "SwissQuote: Using prime profile (standard and premium unavailable)",
+  for (const entry of response) {
+    const prime = entry.spreadProfilePrices?.find(
+      (p: SwissQuoteProfile) => p.spreadProfile === "prime",
     );
-    return prime.ask;
+    if (prime) {
+      console.warn("SwissQuote: Using prime profile (standard/premium unavailable)");
+      return prime.ask;
+    }
   }
 
   throw new Error("No valid SwissQuote price profiles available");

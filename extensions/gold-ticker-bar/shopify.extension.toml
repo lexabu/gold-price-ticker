@@ -1,6 +1,3 @@
-api_version = "2025-07"
-
-[[extensions]]
-name = "Gold Price Ticker"
-handle = "gold-ticker-bar"
+name = "gold-ticker-bar"
+uid = "7267a3eb-fb4d-fe66-bb6b-5d88275295b9c8007e15"
 type = "theme"

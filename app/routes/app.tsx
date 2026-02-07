@@ -16,11 +16,11 @@ export default function App() {
 
   return (
     <AppProvider embedded apiKey={apiKey}>
-      <ui-nav-menu>
-        <a href="/app" rel="home">
-          Settings
-        </a>
-      </ui-nav-menu>
+      <s-box padding="base" borderWidth="base" background="subdued">
+        <s-stack direction="inline" gap="base">
+          <s-link href="/app">Settings</s-link>
+        </s-stack>
+      </s-box>
       <Outlet />
     </AppProvider>
   );
