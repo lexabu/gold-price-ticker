@@ -3,6 +3,7 @@ import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { authenticate } from "../shopify.server";
 import { boundary } from "@shopify/shopify-app-react-router/server";
+import { DATA_TEST_IDS } from "../lib/tests/dataTestIds";
 
 interface TickerSettings {
   karats: string;
@@ -132,7 +133,7 @@ export default function Index() {
     <s-page heading="Gold Price Ticker">
       {error && (
         <s-section>
-          <s-banner tone="critical">
+          <s-banner tone="critical" data-testid={DATA_TEST_IDS.settingsErrorToast}>
             <s-text>{error}</s-text>
           </s-banner>
         </s-section>
@@ -140,7 +141,7 @@ export default function Index() {
 
       {success && (
         <s-section>
-          <s-banner tone="success">
+          <s-banner tone="success" data-testid={DATA_TEST_IDS.settingsSuccessToast}>
             <s-text>{success}</s-text>
           </s-banner>
         </s-section>
@@ -153,6 +154,7 @@ export default function Index() {
             <input
               type="checkbox"
               id="ticker-enabled"
+              data-testid={DATA_TEST_IDS.tickerEnableToggle}
               checked={settings.isActive}
               onChange={() => setSettings({ ...settings, isActive: !settings.isActive })}
               style={{ width: "18px", height: "18px" }}
@@ -179,6 +181,7 @@ export default function Index() {
                 <input
                   type="checkbox"
                   id={`karat-${option.value}`}
+                  data-testid={`karat-checkbox-${option.value}k`}
                   checked={settings.karats.split(",").includes(option.value)}
                   onChange={() => toggleKarat(option.value)}
                   style={{ width: "18px", height: "18px" }}
@@ -202,6 +205,7 @@ export default function Index() {
                 type="radio"
                 id="position-top"
                 name="position"
+                data-testid={DATA_TEST_IDS.positionOptionTop}
                 checked={settings.position === "top"}
                 onChange={() => setSettings({ ...settings, position: "top" })}
                 style={{ width: "18px", height: "18px" }}
@@ -215,6 +219,7 @@ export default function Index() {
                 type="radio"
                 id="position-bottom"
                 name="position"
+                data-testid={DATA_TEST_IDS.positionOptionBottom}
                 checked={settings.position === "bottom"}
                 onChange={() => setSettings({ ...settings, position: "bottom" })}
                 style={{ width: "18px", height: "18px" }}
@@ -236,6 +241,7 @@ export default function Index() {
               <div style={{ marginTop: "8px" }}>
                 <input
                   type="color"
+                  data-testid={DATA_TEST_IDS.backgroundColorPicker}
                   value={settings.bgColor}
                   onChange={(e) => setSettings({ ...settings, bgColor: e.target.value })}
                   style={{ width: "60px", height: "36px", cursor: "pointer" }}
@@ -247,6 +253,7 @@ export default function Index() {
               <div style={{ marginTop: "8px" }}>
                 <input
                   type="color"
+                  data-testid={DATA_TEST_IDS.textColorPicker}
                   value={settings.textColor}
                   onChange={(e) => setSettings({ ...settings, textColor: e.target.value })}
                   style={{ width: "60px", height: "36px", cursor: "pointer" }}
@@ -263,6 +270,7 @@ export default function Index() {
                 min="20"
                 max="100"
                 step="10"
+                data-testid={DATA_TEST_IDS.speedSlider}
                 value={settings.tickerSpeed}
                 onChange={(e) => setSettings({ ...settings, tickerSpeed: parseInt(e.target.value) })}
                 style={{ width: "200px" }}
@@ -275,6 +283,7 @@ export default function Index() {
             <div style={{ marginTop: "8px" }}>
               <input
                 type="text"
+                data-testid={DATA_TEST_IDS.currencyInput}
                 value={settings.currencySymbol}
                 onChange={(e) => setSettings({ ...settings, currencySymbol: e.target.value.slice(0, 3) })}
                 maxLength={3}
@@ -289,7 +298,7 @@ export default function Index() {
       <s-section heading="Preview">
         <s-stack gap="base">
           <s-paragraph>This is how your ticker bar will appear on the storefront.</s-paragraph>
-          <div style={previewStyle}>
+          <div style={previewStyle} data-testid={DATA_TEST_IDS.tickerPreview}>
             <div style={{ display: "flex", gap: "24px", justifyContent: "center", fontSize: "13px" }}>
               {settings.karats
                 .split(",")
@@ -308,7 +317,7 @@ export default function Index() {
 
       {/* Save Button */}
       <s-section>
-        <s-button variant="primary" onClick={saveSettings} disabled={saving}>
+        <s-button variant="primary" onClick={saveSettings} disabled={saving} data-testid={DATA_TEST_IDS.saveSettingsButton}>
           {saving ? "Saving..." : "Save Settings"}
         </s-button>
       </s-section>

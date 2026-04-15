@@ -19,7 +19,10 @@
     "vite": "vite",
     "typecheck": "react-router typegen && tsc --noEmit",
     "test:rate-limit": "node scripts/test-rate-limit.js",
-    "test:optimizer": "node scripts/test-product-optimizer.js"
+    "test:optimizer": "node scripts/test-product-optimizer.js",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug"
   },
   "type": "module",
   "engines": {
@@ -43,6 +46,7 @@
     "wretch": "^3.0.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@shopify/api-codegen-preset": "^1.2.0",
     "@shopify/polaris-types": "^1.0.1",
     "@types/eslint": "^9.6.1",

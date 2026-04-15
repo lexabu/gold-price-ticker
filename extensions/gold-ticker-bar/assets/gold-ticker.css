@@ -3,7 +3,8 @@
   --ticker-text: #e8d44d;
   --ticker-accent: #ffffff;
   position: relative;
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
   background: var(--ticker-bg);
   overflow: hidden;
   z-index: 999;
