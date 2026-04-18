@@ -53,10 +53,38 @@ gold-price-ticker/
 ## Development Commands
 
 ```bash
-shopify app dev          # Start dev server
-npm run build            # Build for production
-npm run test             # Run tests
+npm run dev              # shopify app dev (tunnel + hot reload)
+npm run build            # react-router build for production
+npm run start            # Serve production build
+npm run setup            # prisma generate && prisma migrate deploy
+npm run lint             # ESLint
+npm run typecheck        # react-router typegen + tsc --noEmit
+npm run deploy           # shopify app deploy
+npm run test:e2e         # playwright test (E2E suite)
+npm run test:e2e:ui      # playwright test --ui
+npm run test:e2e:debug   # playwright test --debug
 ```
+
+## Environment Variables
+
+Required in `.env` (dev) and production host:
+
+```bash
+SHOPIFY_API_KEY=<key>
+SHOPIFY_API_SECRET=<secret>
+SCOPES=<scopes>
+HOST=<ngrok-or-production-url>
+DATABASE_URL=<sqlite-dev-or-postgres-prod-url>
+OPENAI_API_KEY=<key>              # AI product recommendations
+```
+
+## Pre-Commit Checklist
+
+Before committing:
+- [ ] `npm run typecheck` passes with no errors
+- [ ] `npm run lint` passes
+- [ ] `npm run build` succeeds
+- [ ] No `.env` secrets committed
 
 ## Key Considerations
 
